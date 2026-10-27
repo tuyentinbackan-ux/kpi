@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Tính Điểm KPI & Báo Cáo Phụ Lục Chuẩn Mẫu</title>
+    <style>
+        body { font-family: 'Times New Roman', Times, serif; margin: 15px; background-color: #f4f6f9; color: #333; }
+        h1, h2, h3 { text-align: center; color: #1a365d; margin-bottom: 8px; }
+        
+        /* Style cho khối bản quyền tác giả */
+        .copyright-box { background: #fef3c7; border: 1px solid #f59e0b; padding: 10px 15px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 12px; color: #78350f; line-height: 1.5; }
+        .copyright-box b { color: #b45309; }
+
+        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; }
+        th, td { border: 1px solid #94a3b8; padding: 4px 3px; text-align: center; }
+        th { background-color: #dbeafe; font-weight: bold; color: #0f172a; }
+        
+        input, select { width: 98%; padding: 3px; box-sizing: border-box; font-family: inherit; font-size: 11px; text-align: center; }
+        input[type="text"] { text-align: left; }
+        
+        /* Style giao diện bảng nhập */
+        .tb-input th { background-color: #dbeafe; vertical-align: middle; }
+        .tb-input .bg-quality-header { background-color: #fef08a; color: #854d0e; }
+        .tb-input .bg-quality-cell { background-color: #fefce8; }
+        .tb-input .bg-progress-header { background-color: #dbeafe; color: #1e40af; }
+        .tb-input .bg-progress-cell { background-color: #eff6ff; }
+        .tb-input .bg-lead-header { background-color: #fed7aa; color: #9a3412; }
+        .tb-input .bg-lead-cell { background-color: #fff7ed; }
+        .tb-input input[readonly] { background-color: #f1f5f9; font-weight: bold; color: #000; }
+        
+        button { border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; margin: 5px 3px; font-size: 12px; }
+        .btn-add { background-color: #10b981; color: white; }
+        .btn-add:hover { background-color: #059669; }
+        .btn-calc { background-color: #2563eb; color: white; }
+        .btn-calc:hover { background-color: #1d4ed8; }
+        .btn-export { background-color: #0284c7; color: white; }
+        .btn-export:hover { background-color: #0369a1; }
+        .btn-delete { background-color: #dc2626; padding: 4px 8px; font-size: 11px; color: white; border-radius: 3px; font-weight: bold; }
+        
+        /* Navigation Tabs */
+        .tab-container { display: flex; gap: 6px; margin-bottom: 15px; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px; flex-wrap: wrap; }
+        .tab-btn { background: #e2e8f0; color: #334155; border: none; padding: 8px 14px; cursor: pointer; font-weight: bold; border-radius: 6px 6px 0 0; font-size: 12px; }
+        .tab-btn.active { background: #2563eb; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .setting-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; }
+
+        /* Style Phụ lục chuẩn mẫu */
+        .pl-container { background: #fff; padding: 15px; border: 1px solid #ccc; font-family: 'Times New Roman', Times, serif; }
+        .pl-header { text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 15px; }
+        .pl-header .sub-header { font-weight: normal; font-style: italic; font-size: 12px; }
+        .pl-title { text-align: center; font-weight: bold; font-size: 14px; margin: 10px 0 15px 0; text-transform: uppercase; }
+        .pl-info table td { border: none; text-align: left; padding: 2px 0; }
+        
+        .tb-pl01 { width: 100%; border-collapse: collapse; font-size: 10px; }
+        .tb-pl01 th, .tb-pl01 td { border: 1px solid #000; padding: 3px 2px; }
+        .tb-pl01 th { background-color: #ffffff; text-align: center; vertical-align: middle; }
+        .tb-pl01 .bg-gray { background-color: #f1f5f9; font-weight: bold; }
+        .tb-pl01 .text-left { text-align: left; }
+        .tb-pl01 .text-right { text-align: right; }
+
+        @media print {
+            @page { size: A4 landscape; margin: 8mm; }
+            body { background-color: white; margin: 0; font-size: 9pt; }
+            .no-print, .tab-container, button { display: none !important; }
+            .card { box-shadow: none; padding: 0; border: none; }
+            .tab-content { display: block !important; }
+            .tb-pl01 th, .tb-pl01 td { border: 1px solid #000 !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- THÔNG TIN BẢN QUYỀN TÁC GIẢ -->
+    <div class="copyright-box no-print">
+        <b>BẢN QUYỀN TÁC GIẢ PHẦN MỀM:</b> Thầy <b>Bùi Kim Tuyến</b> - Hiệu trưởng trường Tiểu học và Trung học cơ sở Mai Lạp, xã Thanh Mai, tỉnh Thái Nguyên.<br>
+        Phần mềm được sử dụng miễn phí cho các cá nhân, tổ chức để tính điểm KPI thay cho việc phải tính toán bằng tay không chính xác.<br>
+        Điện thoại hỗ trợ: <b>0947523921</b>
+    </div>
+
+    <h1 class="no-print">HỆ THỐNG QUẢN LÝ KPI & XẾP LOẠI ĐẢNG VIÊN / CÁN BỘ</h1>
+
+    <!-- THÔNG TIN CHUNG CÁ NHÂN & ĐƠN VỊ -->
+    <div class="card no-print">
+        <h3>THÔNG TIN CÁ NHÂN & ĐƠN VỊ</h3>
+        <table style="border:none;">
+            <tr style="border:none;">
+                <td style="border:none; text-align:left;"><b>Họ và tên:</b> <input type="text" id="fullname" value="Bùi Kim Tuyến" onchange="calculateAll()"></td>
+                <td style="border:none; text-align:left;"><b>Ngày tháng năm sinh:</b> <input type="text" id="dob" value="01/01/1980" onchange="calculateAll()"></td>
+                <td style="border:none; text-align:left;"><b>Đơn vị công tác:</b> <input type="text" id="agency" value="Trường TH&THCS Mai Lạp" onchange="calculateAll()"></td>
+            </tr>
+            <tr style="border:none;">
+                <td style="border:none; text-align:left;"><b>Chức vụ Đảng:</b> <input type="text" id="party_pos" value="Bí thư Chi bộ" onchange="calculateAll()"></td>
+                <td style="border:none; text-align:left;"><b>Chức vụ chính quyền:</b> <input type="text" id="gov_pos" value="Hiệu trưởng" onchange="calculateAll()"></td>
+                <td style="border:none; text-align:left;"><b>Chức vụ đoàn thể:</b> <input type="text" id="mass_pos" value="Không" onchange="calculateAll()"></td>
+            </tr>
+            <tr style="border:none;">
+                <td style="border:none; text-align:left;"><b>Công văn số:</b> <input type="text" id="cv_num" value="...-CV/BTCTU" onchange="calculateAll()"></td>
+                <td style="border:none; text-align:left;"><b>Quý đánh giá:</b> 
+                    <select id="quarter" onchange="calculateAll()" style="width:120px;">
+                        <option value="I">Quý I</option>
+                        <option value="II">Quý II</option>
+                        <option value="III" selected>Quý III</option>
+                        <option value="IV">Quý IV</option>
+                    </select>
+                </td>
+                <td style="border:none; text-align:left;"><b>Năm đánh giá:</b> <input type="number" id="year" value="2026" style="width:120px;" onchange="calculateAll()"></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- TABS ĐIỀU HƯỚNG -->
+    <div class="tab-container no-print">
+        <button class="tab-btn active" onclick="switchTab('input-tab')">1. Nhập Danh Mục & Điểm Trục</button>
+        <button class="tab-btn" onclick="switchTab('phuluc00-tab')">Phụ lục 0 (Tính KPI từng trục)</button>
+        <button class="tab-btn" onclick="switchTab('phuluc01-tab')">Phụ lục 01 (Danh mục & KQ)</button>
+        <button class="tab-btn" onclick="switchTab('phuluc02-tab')">Phụ lục 02 (Tự đánh giá)</button>
+        <button class="tab-btn" onclick="switchTab('phuluc03-tab')">Phụ lục 03 (Khung điểm)</button>
+    </div>
+
+    <!-- TAB 1: NHẬP DỮ LIỆU & ĐIỂM TRỤC -->
+    <div id="input-tab" class="tab-content active card">
+        <h3>I. NHÓM TIÊU CHÍ CHUNG (30 ĐIỂM) - Quy định số 366-QĐ/TW</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 4%;">TT</th>
+                    <th style="width: 50%;">Tiêu chí/Nội dung</th>
+                    <th style="width: 10%;">Đảm bảo</th>
+                    <th style="width: 10%;">Không đảm bảo</th>
+                    <th style="width: 8%;">Điểm tối đa</th>
+                    <th style="width: 8%;">Điểm đạt</th>
+                    <th style="width: 10%;">Ghi chú</th>
+                </tr>
+            </thead>
+            <tbody id="generalTableBody"></tbody>
+        </table>
+
+        <br>
+        <h3>THIẾT LẬP ĐIỂM TỐI ĐA CỦA TỪNG TRỤC (TỔNG = 70 ĐIỂM)</h3>
+        <div class="setting-box">
+            <div><b>Trục 1 (Kinh tế - Xã hội):</b> <input type="number" id="axis_max_1" value="15" onchange="updateAxisMaxScores()"></div>
+            <div><b>Trục 2 (Thể chế, Phân cấp):</b> <input type="number" id="axis_max_2" value="10" onchange="updateAxisMaxScores()"></div>
+            <div><b>Trục 3 (KHCN, CĐS):</b> <input type="number" id="axis_max_3" value="10" onchange="updateAxisMaxScores()"></div>
+            <div><b>Trục 4 (Xây dựng Đảng):</b> <input type="number" id="axis_max_4" value="15" onchange="updateAxisMaxScores()"></div>
+            <div><b>Trục 5 (Văn hóa, An sinh):</b> <input type="number" id="axis_max_5" value="10" onchange="updateAxisMaxScores()"></div>
+            <div><b>Trục 6 (Quốc phòng, An ninh):</b> <input type="number" id="axis_max_6" value="10" onchange="updateAxisMaxScores()"></div>
+        </div>
+        <p style="text-align:right; font-weight:bold; color:#1e40af;" id="axis_total_display">Tổng điểm 6 trục: 70 / 70 điểm</p>
+
+        <hr>
+        <!-- BẢNG NHẬP DANH MỤC CÔNG VIỆC TRONG QUÝ -->
+        <h2 style="color: #1a365d; margin-top: 20px; font-size: 16px;">NHẬP DANH MỤC CÔNG VIỆC TRONG QUÝ</h2>
+        <table class="tb-input" id="taskTable">
+            <thead>
+                <tr>
+                    <th rowspan="2" style="width: 25px;">STT</th>
+                    <th rowspan="2" style="width: 65px;">Trục</th>
+                    <th rowspan="2" style="width: 130px;">Nhiệm vụ trong quý</th>
+                    <th rowspan="2" style="width: 120px;">Sản phẩm / Chỉ tiêu</th>
+                    <th rowspan="2" style="width: 100px;">Nhóm (độ khó)</th>
+                    <th rowspan="2" style="width: 130px;">Đánh giá tiến độ/Chất lượng</th>
+                    <th rowspan="2" style="width: 40px;">Chuẩn?</th>
+                    <th rowspan="2" style="width: 45px;">Điểm TĐ</th>
+                    <th rowspan="2" style="width: 40px;">Hệ số</th>
+                    <th rowspan="2" style="width: 35px;">SL KH</th>
+                    <th rowspan="2" style="width: 35px;">Thực tế</th>
+                    <th colspan="3" class="bg-quality-header">Chất lượng</th>
+                    <th colspan="3" class="bg-progress-header">Tiến độ</th>
+                    <th rowspan="2" class="bg-lead-header" style="width: 50px;">Lãnh đạo (%)</th>
+                    <th rowspan="2" style="width: 35px;">Xóa</th>
+                </tr>
+                <tr>
+                    <th class="bg-quality-header" style="width: 45px;">Số việc không sai sót</th>
+                    <th class="bg-quality-header" style="width: 45px;">Số việc sai sót</th>
+                    <th class="bg-quality-header" style="width: 40px;">Số lần làm lại</th>
+                    <th class="bg-progress-header" style="width: 45px;">Số việc đúng TĐ</th>
+                    <th class="bg-progress-header" style="width: 45px;">Số việc không đúng TĐ</th>
+                    <th class="bg-progress-header" style="width: 40px;">Số lần chậm TĐ</th>
+                </tr>
+            </thead>
+            <tbody id="taskTableBody"></tbody>
+        </table>
+        
+        <div style="margin-top: 15px;">
+            <button class="btn-add" onclick="addTaskRow()">+ Thêm Công Việc</button>
+            <button class="btn-calc" onclick="calculateAll()">⚡ Tính Toán Lại Dữ Liệu</button>
+            <button class="btn-export" onclick="switchTab('phuluc01-tab')">🖨️ Xuất / In Các Báo Cáo Phụ Lục</button>
+        </div>
+    </div>
+
+    <!-- TAB 2: PHỤ LỤC 0 -->
+    <div id="phuluc00-tab" class="tab-content card">
+        <div id="phuluc00-content" class="pl-container"></div>
+        <br><button class="btn-export no-print" onclick="window.print()">🖨️ In Phụ Lục 0</button>
+    </div>
+
+    <!-- TAB 3: PHỤ LỤC 01 -->
+    <div id="phuluc01-tab" class="tab-content card">
+        <div id="phuluc01-content" class="pl-container"></div>
+        <br><button class="btn-export no-print" onclick="window.print()">🖨️ In Phụ Lục 01</button>
+    </div>
+
+    <!-- TAB 4: PHỤ LỤC 02 -->
+    <div id="phuluc02-tab" class="tab-content card">
+        <div id="phuluc02-content" class="pl-container"></div>
+        <br><button class="btn-export no-print" onclick="window.print()">🖨️ In Phụ Lục 02</button>
+    </div>
+
+    <!-- TAB 5: PHỤ LỤC 03 -->
+    <div id="phuluc03-tab" class="tab-content card">
+        <div id="phuluc03-content" class="pl-container"></div>
+        <br><button class="btn-export no-print" onclick="window.print()">🖨️ In Phụ Lục 03</button>
+    </div>
+
+    <script>
+        const generalCriteriaStructure = [
+            {
+                groupTitle: "1. Về phẩm chất chính trị, đạo đức, lối sống, thực hiện trách nhiệm nêu gương",
+                groupMaxScore: 18,
+                items: [
+                    { id: "1.1", text: "Tuyệt đối trung thành với Đảng, Tổ quốc và Nhân dân...", maxScore: 2 },
+                    { id: "1.2", text: "Có tinh thần yêu nước sâu sắc, tận tụy phục vụ Nhân dân...", maxScore: 2 },
+                    { id: "1.3", text: "Chấp hành nghiêm chủ trương, đường lối, nghị quyết...", maxScore: 2 },
+                    { id: "1.4", text: "Có tinh thần tự giác, trách nhiệm cao trong học tập...", maxScore: 2 },
+                    { id: "1.5", text: "Có phẩm chất đạo đức, lối sống trong sáng, trung thực...", maxScore: 2 },
+                    { id: "1.6", text: "Không tham vọng quyền lực, không chạy chức chạy quyền...", maxScore: 2 },
+                    { id: "1.7", text: "Có uy tín cao, tiêu biểu về phẩm chất đạo đức...", maxScore: 2 },
+                    { id: "1.8", text: "Có tinh thần chủ động, đổi mới sáng tạo...", maxScore: 2 },
+                    { id: "1.9", text: "Thực hiện việc kê khai và công khai tài sản, thu nhập...", maxScore: 2 }
+                ]
+            },
+            {
+                groupTitle: "2. Tư duy đổi mới, chiến lược, khát vọng cống hiến, dám nghĩ, dám làm",
+                groupMaxScore: 4,
+                items: [
+                    { id: "2.1", text: "Có tư duy đổi mới, tầm nhìn chiến lược...", maxScore: 1 },
+                    { id: "2.2", text: "Luôn bám sát thực tiễn, có nhiều cách làm hay...", maxScore: 1 },
+                    { id: "2.3", text: "Nói đi đôi với làm, dám nghĩ, dám làm...", maxScore: 1 },
+                    { id: "2.4", text: "Có khát vọng phấn đấu, cống hiến...", maxScore: 1 }
+                ]
+            },
+            {
+                groupTitle: "3. Về tự phê bình và phê bình, tự soi, tự sửa, khắc phục hạn chế, khuyết điểm",
+                groupMaxScore: 8,
+                items: [
+                    { id: "3.1", text: "Chủ động, nghiêm túc thực hiện tự phê bình...", maxScore: 2 },
+                    { id: "3.2", text: "Có kế hoạch rõ ràng trong khắc phục hạn chế...", maxScore: 2 },
+                    { id: "3.3", text: "Kết quả khắc phục hoàn thành từ ≥ 80%...", maxScore: 2 },
+                    { id: "3.4", text: "Tự soi, tự sửa trên tinh thần trách nhiệm...", maxScore: 2 }
+                ]
+            }
+        ];
+
+        let axisMaxScores = { 1: 15, 2: 10, 3: 10, 4: 15, 5: 10, 6: 10 };
+        const axisNames = {
+            1: "Trục (1) Thực hiện mục tiêu phát triển kinh tế-xã hội và nhiệm vụ chính trị được giao",
+            2: "Trục (2) Hoàn thiện thể chế, đẩy mạnh phân cấp, phân quyền gắn với kiểm tra giám sát",
+            3: "Trục (3) Thúc đẩy phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số",
+            4: "Trục (4) Xây dựng Đảng và hệ thống chính trị trong sạch, vững mạnh; giữ gìn đoàn kết thống nhất nội bộ; phòng chống tham nhũng, lãng phí, tiêu cực",
+            5: "Trục (5) Phát triển văn hóa, con người, bảo đảm an sinh xã hội, nâng cao đời sống Nhân dân",
+            6: "Trục (6) Củng cố quốc phòng, an ninh, giữ vững ổn định chính trị - xã hội, nâng cao hiệu quả đối ngoại và hội nhập quốc tế"
+        };
+
+        let tasks = [
+            { 
+                axis: 1, 
+                name: "Chỉ đạo Thu ngân sách trên địa", 
+                product: "Thu lũy kế 107.5% KH", 
+                difficulty: "Nhóm I (Phức tạp)", 
+                evalText: "Hoàn thành vượt kế hoạch đề ra, đảm bảo c", 
+                isStandard: false, 
+                maxScore: 400, 
+                factor: 4.00, 
+                qty: 1, 
+                actualQty: 1,
+                noErrorQty: 1,
+                redoCount: 0,
+                onTimeQty: 1,
+                delayCount: 0,
+                leadPct: 100
+            },
+            { 
+                axis: 1, 
+                name: "Chỉ đạo giải ngân vốn đầu tư c", 
+                product: "Đạt 35.7% kế hoạch", 
+                difficulty: "Nhóm I (Phức tạp)", 
+                evalText: "Tiến độ chậm so với yêu cầu, cần đẩy nhan", 
+                isStandard: false, 
+                maxScore: 400, 
+                factor: 4.00, 
+                qty: 1, 
+                actualQty: 1,
+                noErrorQty: 0,
+                redoCount: 1,
+                onTimeQty: 0,
+                delayCount: 1,
+                leadPct: 100
+            },
+            { 
+                axis: 2, 
+                name: "Chỉ đạo chuẩn bị nội dung hội", 
+                product: "Hội nghị, kết luận", 
+                difficulty: "Nhóm II (Thường xuyên)", 
+                evalText: "Đảm bảo tiến độ, chất lượng nội dung đạt y", 
+                isStandard: true, 
+                maxScore: 100, 
+                factor: 1.00, 
+                qty: 1, 
+                actualQty: 1,
+                noErrorQty: 1,
+                redoCount: 0,
+                onTimeQty: 1,
+                delayCount: 0,
+                leadPct: 100
+            }
+        ];
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            const targetBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+            if (targetBtn) targetBtn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function renderGeneralCriteriaTable() {
+            const tbody = document.getElementById('generalTableBody');
+            if (tbody.children.length > 0) return;
+
+            let html = '';
+            generalCriteriaStructure.forEach((grp) => {
+                html += `<tr style="background:#f1f5f9; font-weight:bold;">
+                    <td colspan="4" style="text-align:left;"><b>${grp.groupTitle}</b></td>
+                    <td><b>${grp.groupMaxScore}</b></td>
+                    <td id="group_score_${grp.groupTitle.charAt(0)}" style="color:#0369a1; font-weight:bold;">${grp.groupMaxScore}</td>
+                    <td></td>
+                </tr>`;
+
+                grp.items.forEach((item) => {
+                    let inputName = `gen_${item.id.replace('.', '_')}`;
+                    html += `<tr>
+                        <td><b>${item.id}</b></td>
+                        <td style="text-align:left;">${item.text}</td>
+                        <td><input type="radio" name="${inputName}" value="${item.maxScore}" checked onchange="calculateAll()"></td>
+                        <td><input type="radio" name="${inputName}" value="0" onchange="calculateAll()"></td>
+                        <td>${item.maxScore}</td>
+                        <td id="score_${inputName}" style="font-weight:bold;">${item.maxScore}</td>
+                        <td></td>
+                    </tr>`;
+                });
+            });
+
+            html += `<tr style="background:#e0f2fe; font-weight:bold;">
+                <td colspan="4" style="text-align:right;"><b>Tổng (A) =</b></td>
+                <td><b>30</b></td>
+                <td id="total_general_score_cell" style="color:#0369a1;"><b>30</b></td>
+                <td></td>
+            </tr>`;
+
+            tbody.innerHTML = html;
+        }
+
+        function getGeneralScore() {
+            let totalGeneralScore = 0;
+            generalCriteriaStructure.forEach((grp) => {
+                let groupScore = 0;
+                grp.items.forEach((item) => {
+                    let inputName = `gen_${item.id.replace('.', '_')}`;
+                    let checkedRadio = document.querySelector(`input[name="${inputName}"]:checked`);
+                    let val = checkedRadio ? parseFloat(checkedRadio.value) : item.maxScore;
+                    groupScore += val;
+                    let cell = document.getElementById(`score_${inputName}`);
+                    if (cell) cell.innerText = val;
+                });
+                let grpCell = document.getElementById(`group_score_${grp.groupTitle.charAt(0)}`);
+                if (grpCell) grpCell.innerText = groupScore;
+                totalGeneralScore += groupScore;
+            });
+            let totalCell = document.getElementById('total_general_score_cell');
+            if (totalCell) totalCell.innerHTML = `<b>${totalGeneralScore}</b>`;
+            return totalGeneralScore;
+        }
+
+        function updateAxisMaxScores() {
+            let total = 0;
+            for(let i=1; i<=6; i++) {
+                const val = parseFloat(document.getElementById(`axis_max_${i}`).value) || 0;
+                axisMaxScores[i] = val;
+                total += val;
+            }
+            document.getElementById('axis_total_display').innerText = `Tổng điểm 6 trục: ${total} / 70 điểm`;
+            calculateAll();
+        }
+
+        function renderInputTable() {
+            const tbody = document.getElementById('taskTableBody');
+            tbody.innerHTML = '';
+
+            tasks.forEach((t, idx) => {
+                const errorQty = Math.max(0, t.actualQty - (t.noErrorQty ?? t.actualQty));
+                const notOnTimeQty = Math.max(0, t.actualQty - (t.onTimeQty ?? t.actualQty));
+                if (t.leadPct === undefined) t.leadPct = 100;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><b>${idx + 1}</b></td>
+                    <td>
+                        <select onchange="updateTask(${idx}, 'axis', this.value)">
+                            ${[1,2,3,4,5,6].map(i => `<option value="${i}" ${t.axis == i ? 'selected':''}>Trục ${i}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td><input type="text" value="${t.name}" onchange="updateTask(${idx}, 'name', this.value)"></td>
+                    <td><input type="text" value="${t.product}" onchange="updateTask(${idx}, 'product', this.value)"></td>
+                    <td><input type="text" value="${t.difficulty}" onchange="updateTask(${idx}, 'difficulty', this.value)"></td>
+                    <td><input type="text" value="${t.evalText || ''}" onchange="updateTask(${idx}, 'evalText', this.value)"></td>
+                    <td><input type="checkbox" ${t.isStandard ? 'checked':''} onchange="setStandardTask(${idx})"></td>
+                    <td><input type="number" value="${t.maxScore}" onchange="updateTask(${idx}, 'maxScore', this.value)"></td>
+                    <td><b>${(t.factor || (t.maxScore/100)).toFixed(2)}</b></td>
+                    <td><input type="number" value="${t.qty}" onchange="updateTask(${idx}, 'qty', this.value)"></td>
+                    <td><input type="number" value="${t.actualQty}" onchange="updateTask(${idx}, 'actualQty', this.value)"></td>
+                    
+                    <td class="bg-quality-cell"><input type="number" value="${t.noErrorQty ?? t.actualQty}" onchange="updateTask(${idx}, 'noErrorQty', this.value)"></td>
+                    <td class="bg-quality-cell"><input type="number" value="${errorQty}" readonly></td>
+                    <td class="bg-quality-cell"><input type="number" value="${t.redoCount}" onchange="updateTask(${idx}, 'redoCount', this.value)"></td>
+                    
+                    <td class="bg-progress-cell"><input type="number" value="${t.onTimeQty ?? t.actualQty}" onchange="updateTask(${idx}, 'onTimeQty', this.value)"></td>
+                    <td class="bg-progress-cell"><input type="number" value="${notOnTimeQty}" readonly></td>
+                    <td class="bg-progress-cell"><input type="number" value="${t.delayCount}" onchange="updateTask(${idx}, 'delayCount', this.value)"></td>
+                    
+                    <td class="bg-lead-cell"><input type="number" value="${t.leadPct}" onchange="updateTask(${idx}, 'leadPct', this.value)"></td>
+                    
+                    <td><button class="btn-delete" onclick="deleteTask(${idx})">Xóa</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function setStandardTask(index) {
+            tasks.forEach((t, i) => t.isStandard = (i === index));
+            calculateAll();
+        }
+
+        function addTaskRow() {
+            tasks.push({ 
+                axis: 1, 
+                name: "", 
+                product: "", 
+                difficulty: "Nhóm II (Thường xuyên)", 
+                evalText: "Đảm bảo tiến độ, chất lượng", 
+                isStandard: false, 
+                maxScore: 100, 
+                factor: 1.00, 
+                qty: 1, 
+                actualQty: 1, 
+                noErrorQty: 1,
+                redoCount: 0, 
+                onTimeQty: 1,
+                delayCount: 0,
+                leadPct: 100
+            });
+            renderInputTable();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            calculateAll();
+        }
+
+        function updateTask(index, field, value) {
+            if (field === 'name' || field === 'product' || field === 'difficulty' || field === 'evalText') {
+                tasks[index][field] = value;
+            } else {
+                tasks[index][field] = parseFloat(value) || 0;
+            }
+            if (field === 'maxScore') {
+                tasks[index].factor = tasks[index].maxScore / 100;
+            }
+            calculateAll();
+        }
+
+        function calculateAxisKPI(axisNum) {
+            const axisTasks = tasks.filter(t => t.axis == axisNum);
+
+            if (axisTasks.length === 0) return { A: 0, B: 0, C: 0, D: 0, KPI: null, score: 0, totalConvertedPlan: 0, totalConvertedActual: 0, totalConvertedB: 0, totalConvertedC: 0, totalConvertedD: 0 };
+
+            let totalConvertedPlan = 0;
+            let totalConvertedActual = 0;
+            let totalConvertedB = 0;
+            let totalConvertedC = 0;
+            let totalConvertedD = 0;
+            let totalLeadPct = 0;
+
+            axisTasks.forEach(t => {
+                const factor = t.factor || (t.maxScore / 100);
+                const convertedPlan = t.qty * factor;
+                const convertedActual = t.actualQty * factor;
+                
+                let qualityScore = factor - (factor * t.redoCount * 0.25);
+                if (qualityScore < 0) qualityScore = 0;
+                const convertedB = t.actualQty * qualityScore;
+
+                let progressScore = factor - (factor * t.delayCount * 0.25);
+                if (progressScore < 0) progressScore = 0;
+                const convertedC = t.actualQty * progressScore;
+
+                const leadVal = t.leadPct !== undefined ? t.leadPct : 100;
+                const convertedD = convertedActual * (leadVal / 100);
+
+                totalConvertedPlan += convertedPlan;
+                totalConvertedActual += convertedActual;
+                totalConvertedB += convertedB;
+                totalConvertedC += convertedC;
+                totalConvertedD += convertedD;
+                totalLeadPct += leadVal;
+            });
+
+            const A = totalConvertedPlan > 0 ? (totalConvertedActual / totalConvertedPlan) * 100 : 0;
+            const B = totalConvertedPlan > 0 ? (totalConvertedB / totalConvertedPlan) * 100 : 0;
+            const C = totalConvertedPlan > 0 ? (totalConvertedC / totalConvertedPlan) * 100 : 0;
+            const D = axisTasks.length > 0 ? totalLeadPct / axisTasks.length : 0;
+
+            if (totalConvertedPlan === 0) {
+                return { A: 0, B: 0, C: 0, D: 0, KPI: null, score: 0, totalConvertedPlan: 0, totalConvertedActual: 0, totalConvertedB: 0, totalConvertedC: 0, totalConvertedD: 0 };
+            }
+
+            const avgConvertedSum = (totalConvertedActual + totalConvertedB + totalConvertedC + totalConvertedD) / 4;
+            const KPI_ratio = avgConvertedSum / totalConvertedPlan;
+            const KPI = KPI_ratio * 100;
+            const score = KPI_ratio * axisMaxScores[axisNum];
+
+            return { A, B, C, D, KPI, score, totalConvertedPlan, totalConvertedActual, totalConvertedB, totalConvertedC, totalConvertedD };
+        }
+
+        function calculateAll() {
+            renderGeneralCriteriaTable();
+            renderInputTable();
+            renderPhuLuc00();
+            renderPhuLuc01();
+            renderPhuLuc02();
+            renderPhuLuc03();
+        }
+
+        function renderPhuLuc00() {
+            const q = document.getElementById('quarter').value;
+            const y = document.getElementById('year').value;
+            const fullname = document.getElementById('fullname').value;
+
+            let html = `
+                <div class="pl-title">PHỤ LỤC 0: BẢNG TÍNH ĐIỂM KPI CHI TIẾT TỪNG TRỤC</div>
+                <div style="text-align:center; font-weight:bold; margin-bottom:15px;">Quý ${q}, Năm ${y} - Cán bộ: ${fullname}</div>
+                <table class="tb-pl01">
+                    <thead>
+                        <tr class="bg-gray">
+                            <th>STT</th>
+                            <th>Tên Trục Công Tác</th>
+                            <th>A: Tiến độ khối lượng (%)</th>
+                            <th>B: Chất lượng (%)</th>
+                            <th>C: Tiến độ thời gian (%)</th>
+                            <th>D: Chỉ đạo điều hành (%)</th>
+                            <th>Chỉ số KPI Trục (%)</th>
+                            <th>Điểm tối đa</th>
+                            <th>Điểm Đạt Trục</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+            
+            let totalScore = 0;
+            for(let i=1; i<=6; i++) {
+                const res = calculateAxisKPI(i);
+                totalScore += res.score;
+                html += `<tr>
+                    <td><b>${i}</b></td>
+                    <td class="text-left">${axisNames[i]}</td>
+                    <td>${res.KPI !== null ? res.A.toFixed(1) + '%' : '-'}</td>
+                    <td>${res.KPI !== null ? res.B.toFixed(1) + '%' : '-'}</td>
+                    <td>${res.KPI !== null ? res.C.toFixed(1) + '%' : '-'}</td>
+                    <td>${res.D.toFixed(1)}%</td>
+                    <td><b>${res.KPI !== null ? res.KPI.toFixed(1) + '%' : '#DIV/0!'}</b></td>
+                    <td>${axisMaxScores[i]}</td>
+                    <td><b>${res.KPI !== null ? res.score.toFixed(2) : '#DIV/0!'}</b></td>
+                </tr>`;
+            }
+
+            html += `<tr class="bg-gray">
+                <td colspan="7" class="text-right">TỔNG ĐIỂM KPI (BÁO CÁO B) =</td>
+                <td>70</td>
+                <td style="color:#1d4ed8;">${totalScore.toFixed(2)}</td>
+            </tr>
+            </tbody>
+            </table>`;
+
+            document.getElementById('phuluc00-content').innerHTML = html;
+        }
+
+        function renderPhuLuc01() {
+            const fullname = document.getElementById('fullname').value;
+            const partyPos = document.getElementById('party_pos').value;
+            const govPos = document.getElementById('gov_pos').value;
+            const massPos = document.getElementById('mass_pos').value;
+            const agency = document.getElementById('agency').value;
+            const q = document.getElementById('quarter').value;
+            const y = document.getElementById('year').value;
+            const cvNum = document.getElementById('cv_num').value;
+            const dob = document.getElementById('dob').value;
+
+            let html = `
+                <div class="pl-header">
+                    <b>PHỤ LỤC 01</b><br>
+                    <b>DANH MỤC SẢN PHẨM VÀ KẾT QUẢ THỰC HIỆN QUÝ ${q} NĂM ${y}</b><br>
+                    <span class="sub-header">(Kèm theo Công văn số ${cvNum} ngày /${q === 'III' ? '9' : '12'}/${y} của Ban Tổ chức Tỉnh ủy)</span>
+                </div>
+
+                <div class="pl-info">
+                    <table style="width:100%; font-size:11px;">
+                        <tr><td style="width:50%;"><b>Họ và tên:</b> ${fullname}</td><td><b>Ngày tháng năm sinh:</b> ${dob}</td></tr>
+                        <tr><td colspan="2"><b>Chức vụ Đảng:</b> ${partyPos}</td></tr>
+                        <tr><td colspan="2"><b>Chức vụ chính quyền:</b> ${govPos}</td></tr>
+                        <tr><td colspan="2"><b>Chức vụ đoàn thể:</b> ${massPos}</td></tr>
+                        <tr><td colspan="2"><b>Đơn vị công tác:</b> ${agency}</td></tr>
+                    </table>
+                </div>
+
+                <table class="tb-pl01">
+                    <thead>
+                        <tr>
+                            <th rowspan="3" style="width:3%;">TT</th>
+                            <th rowspan="3" style="width:18%;">Nhiệm vụ trong quý</th>
+                            <th rowspan="3" style="width:14%;">Sản phẩm/công việc/Chỉ tiêu đã thực hiện</th>
+                            <th rowspan="3" style="width:6%;">Nhóm (độ khó, phức tạp)</th>
+                            <th rowspan="3" style="width:4%;">Số lượng</th>
+                            <th rowspan="3" style="width:8%;">Đánh giá về tiến độ/Chất lượng/Hiệu quả so với mục tiêu, yêu cầu</th>
+                            <th rowspan="3" style="width:4%;">Hệ số quy đổi</th>
+                            <th rowspan="3" style="width:5%;">Số lượng quy đổi<br><i>(6) x (8)</i></th>
+                            <th colspan="8">THỰC TẾ TRIỂN KHAI</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">KPI (Số lượng) (A)</th>
+                            <th colspan="2">KPI (Chất lượng) (B)</th>
+                            <th colspan="2">KPI (Tiến độ) (C)</th>
+                            <th colspan="2">KPI (Năng lực lãnh đạo, chỉ đạo điều hành) (D)</th>
+                        </tr>
+                        <tr>
+                            <th style="width:4%;">Thực tế hoàn thành (SP/CV)</th>
+                            <th style="width:5%;">Số lượng hoàn thành quy đổi</th>
+                            <th style="width:5%;">Thực tế hoàn thành (%)</th>
+                            <th style="width:5%;">Số lượng quy đổi B</th>
+                            <th style="width:5%;">Thực tế hoàn thành (%)</th>
+                            <th style="width:5%;">Số lượng quy đổi C</th>
+                            <th style="width:5%;">Thực tế hoàn thành (%)</th>
+                            <th style="width:5%;">Số lượng quy đổi D</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-gray"><td class="text-left" colspan="16"><b>A. KẾT QUẢ THỰC HIỆN DANH MỤC SẢN PHẨM/CÔNG VIỆC CÁ NHÂN ĐĂNG KÝ QUÝ ${q}/${y}</b></td></tr>
+            `;
+
+            let sumTotalPlan = 0;
+            let sumTotalActual = 0;
+            let sumTotalB = 0;
+            let sumTotalC = 0;
+            let sumTotalD = 0;
+            let sumAxisScores = 0;
+
+            const romanNumeral = ["I", "II", "III", "IV", "V", "VI"];
+
+            for (let i = 1; i <= 6; i++) {
+                const axisTasks = tasks.filter(t => t.axis == i);
+                const res = calculateAxisKPI(i);
+                
+                sumTotalPlan += res.totalConvertedPlan;
+                sumTotalActual += res.totalConvertedActual;
+                sumTotalB += res.totalConvertedB;
+                sumTotalC += res.totalConvertedC;
+                sumTotalD += res.totalConvertedD;
+                if (res.KPI !== null) sumAxisScores += res.score;
+
+                html += `<tr class="bg-gray"><td class="text-left" colspan="16"><b>${romanNumeral[i-1]}. ${axisNames[i]} (${axisMaxScores[i]} điểm)</b></td></tr>`;
+
+                if (axisTasks.length === 0) {
+                    html += `<tr><td>1</td><td class="text-left">...</td><td></td><td></td><td>0</td><td></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0%</td><td>0</td><td>0%</td><td>0</td><td>0%</td><td>0</td></tr>`;
+                } else {
+                    axisTasks.forEach((t, idx) => {
+                        const factor = t.factor || (t.maxScore / 100);
+                        const convertedPlan = t.qty * factor;
+                        const convertedActual = t.actualQty * factor;
+
+                        let qualityScore = factor - (factor * t.redoCount * 0.25);
+                        if (qualityScore < 0) qualityScore = 0;
+                        const convertedB = t.actualQty * qualityScore;
+                        const qualityPercent = factor > 0 ? (qualityScore / factor) * 100 : 0;
+
+                        let progressScore = factor - (factor * t.delayCount * 0.25);
+                        if (progressScore < 0) progressScore = 0;
+                        const convertedC = t.actualQty * progressScore;
+                        const progressPercent = factor > 0 ? (progressScore / factor) * 100 : 0;
+
+                        const taskLeadPct = t.leadPct !== undefined ? t.leadPct : 100;
+                        const convertedD = convertedActual * (taskLeadPct / 100);
+
+                        html += `<tr>
+                            <td>${idx + 1}</td>
+                            <td class="text-left">${t.name}</td>
+                            <td class="text-left">${t.product}</td>
+                            <td>${t.difficulty}</td>
+                            <td>${t.qty}</td>
+                            <td>${t.evalText}</td>
+                            <td>${factor.toFixed(2)}</td>
+                            <td>${convertedPlan.toFixed(2)}</td>
+                            <td>${t.actualQty}</td>
+                            <td>${convertedActual.toFixed(2)}</td>
+                            <td>${qualityPercent.toFixed(1)}%</td>
+                            <td>${convertedB.toFixed(2)}</td>
+                            <td>${progressPercent.toFixed(1)}%</td>
+                            <td>${convertedC.toFixed(2)}</td>
+                            <td>${taskLeadPct.toFixed(0)}%</td>
+                            <td>${convertedD.toFixed(2)}</td>
+                        </tr>`;
+                    });
+                }
+
+                html += `<tr style="font-weight:bold; background:#fafafa;">
+                    <td colspan="7" class="text-right"><b>Tổng</b></td>
+                    <td><b>${res.totalConvertedPlan.toFixed(2)}</b></td>
+                    <td></td>
+                    <td><b>${res.totalConvertedActual.toFixed(2)}</b></td>
+                    <td></td>
+                    <td><b>${res.totalConvertedB.toFixed(2)}</b></td>
+                    <td></td>
+                    <td><b>${res.totalConvertedC.toFixed(2)}</b></td>
+                    <td></td>
+                    <td><b>${res.totalConvertedD.toFixed(2)}</b></td>
+                </tr>
+                <tr style="font-weight:bold; background:#f1f5f9;">
+                    <td colspan="7" class="text-right"><b>Điểm KPI</b></td>
+                    <td colspan="9" class="text-left" style="color:#0369a1;"><b>${res.KPI !== null ? res.KPI.toFixed(1) + '%' : '#DIV/0!'}</b></td>
+                </tr>
+                <tr style="font-weight:bold; background:#e2e8f0;">
+                    <td colspan="7" class="text-right"><b>Điểm Trục (${i})</b></td>
+                    <td colspan="9" class="text-left" style="color:#1d4ed8;"><b>${res.KPI !== null ? res.score.toFixed(2) : '#DIV/0!'}</b></td>
+                </tr>`;
+            }
+
+            const genScore = getGeneralScore();
+            const grandTotal = genScore + sumAxisScores;
+
+            html += `
+                <tr class="bg-gray">
+                    <td colspan="7" class="text-right"><b>TỔNG CÔNG VIỆC QUY ĐỔI TẤT CẢ TỪ TRỤC (I) ĐẾN (VI)</b></td>
+                    <td><b>${sumTotalPlan.toFixed(2)}</b></td>
+                    <td></td>
+                    <td><b>${sumTotalActual.toFixed(2)}</b></td>
+                    <td></td>
+                    <td><b>${sumTotalB.toFixed(2)}</b></td>
+                    <td></td>
+                    <td><b>${sumTotalC.toFixed(2)}</b></td>
+                    <td></td>
+                    <td><b>${sumTotalD.toFixed(2)}</b></td>
+                </tr>
+                <tr style="font-weight:bold; background:#e0f2fe;">
+                    <td colspan="7" class="text-right"><b>Tổng điểm 06 trục</b></td>
+                    <td colspan="9" class="text-left" style="color:#0369a1;"><b>${sumAxisScores > 0 ? sumAxisScores.toFixed(2) : '#DIV/0!'}</b></td>
+                </tr>
+                <tr style="font-weight:bold; background:#f0fdf4;">
+                    <td colspan="7" class="text-right"><b>Tổng điểm tiêu chí chung (A)</b></td>
+                    <td colspan="9" class="text-left" style="color:#16a34a;"><b>${genScore.toFixed(2)}</b></td>
+                </tr>
+                <tr style="font-weight:bold; background:#fef3c7;">
+                    <td colspan="7" class="text-right"><b>TỔNG ĐIỂM (A + B)</b></td>
+                    <td colspan="9" class="text-left" style="color:#b45309;"><b>${grandTotal > 0 ? grandTotal.toFixed(2) : '#DIV/0!'}</b></td>
+                </tr>
+                </tbody>
+            </table>`;
+
+            document.getElementById('phuluc01-content').innerHTML = html;
+        }
+
+        function renderPhuLuc02() {
+            const agency = document.getElementById('agency').value;
+            const q = document.getElementById('quarter').value;
+            const y = document.getElementById('year').value;
+            const fullname = document.getElementById('fullname').value;
+            const dob = document.getElementById('dob').value;
+            const partyPos = document.getElementById('party_pos').value;
+            const govPos = document.getElementById('gov_pos').value;
+            const massPos = document.getElementById('mass_pos').value;
+
+            let generalScore = getGeneralScore();
+            let totalB = 0;
+
+            let html = `
+                <div style="font-size:11px; text-align:right; font-style:italic;">Phụ lục 02</div>
+                <div style="text-align:center; font-weight:bold; font-size:13px; margin-bottom:10px;">
+                    <div><b>ĐẢNG CỘNG SẢN VIỆT NAM</b></div>
+                    <div style="font-style: italic; font-weight:normal; margin-top:3px;">............, ngày ...... tháng ${q === 'III' ? '9' : '12'} năm ${y}</div>
+                </div>
+
+                <div class="pl-title">BẢN TỰ ĐÁNH GIÁ, XẾP LOẠI CỦA CÁ NHÂN</div>
+                <div style="text-align:center; font-weight:bold; font-size:12px; margin-bottom:15px;">Quý ${q}, Năm ${y}<br>------</div>
+
+                <div class="pl-info">
+                    <table style="width:100%;">
+                        <tr><td style="width:50%;"><b>Họ và tên:</b> ${fullname}</td><td><b>Ngày tháng năm sinh:</b> ${dob}</td></tr>
+                        <tr><td colspan="2"><b>Chức vụ Đảng:</b> ${partyPos}</td></tr>
+                        <tr><td colspan="2"><b>Chức vụ chính quyền:</b> ${govPos}</td></tr>
+                        <tr><td colspan="2"><b>Chức vụ đoàn thể:</b> ${massPos}</td></tr>
+                        <tr><td colspan="2"><b>Đơn vị công tác:</b> ${agency}</td></tr>
+                    </table>
+                    <div style="margin-top:8px;"><b>I. Tự đánh giá kết quả thực hiện nhiệm vụ</b></div>
+                </div>
+
+                <table class="tb-pl01">
+                    <thead>
+                        <tr class="bg-gray">
+                            <th colspan="7" class="text-left"><b>I. NHÓM TIÊU CHÍ CHUNG (30 ĐIỂM). Quy định số 366-QĐ/TW của Bộ Chính trị</b></th>
+                        </tr>
+                        <tr>
+                            <th style="width:4%;">TT</th>
+                            <th style="width:52%;">Tiêu chí/Nội dung</th>
+                            <th style="width:8%;">Đảm bảo</th>
+                            <th style="width:8%;">Không đảm bảo</th>
+                            <th style="width:8%;">Điểm tối đa</th>
+                            <th style="width:8%;">Điểm đạt</th>
+                            <th style="width:12%;">Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+            generalCriteriaStructure.forEach((grp) => {
+                let grpScore = 0;
+                grp.items.forEach(item => {
+                    let inputName = `gen_${item.id.replace('.', '_')}`;
+                    let checkedRadio = document.querySelector(`input[name="${inputName}"]:checked`);
+                    grpScore += checkedRadio ? parseFloat(checkedRadio.value) : item.maxScore;
+                });
+
+                html += `<tr class="bg-gray">
+                    <td><b>${grp.groupTitle.charAt(0)}</b></td>
+                    <td class="text-left"><b>${grp.groupTitle.substring(3)}</b></td>
+                    <td></td><td></td>
+                    <td><b>${grp.groupMaxScore}</b></td>
+                    <td><b>${grpScore}</b></td>
+                    <td></td>
+                </tr>`;
+
+                grp.items.forEach((item) => {
+                    let inputName = `gen_${item.id.replace('.', '_')}`;
+                    let checkedRadio = document.querySelector(`input[name="${inputName}"]:checked`);
+                    let isDamBao = (!checkedRadio || checkedRadio.value > 0);
+                    let scoreVal = isDamBao ? item.maxScore : 0;
+
+                    html += `<tr>
+                        <td>${item.id}</td>
+                        <td class="text-left">${item.text}</td>
+                        <td>${isDamBao ? 'X' : ''}</td>
+                        <td>${!isDamBao ? 'X' : ''}</td>
+                        <td>${item.maxScore}</td>
+                        <td>${scoreVal}</td>
+                        <td></td>
+                    </tr>`;
+                });
+            });
+
+            html += `<tr class="bg-gray">
+                <td colspan="4" class="text-right"><b>Tổng (A) =</b></td>
+                <td><b>30</b></td>
+                <td><b>${generalScore}</b></td>
+                <td></td>
+            </tr>
+            </tbody>
+            </table>
+
+            <br>
+            <table class="tb-pl01">
+                <thead>
+                    <tr class="bg-gray">
+                        <th colspan="7" class="text-left"><b>B. KẾT QUẢ THỰC HIỆN NHIỆM VỤ ĐƯỢC GIAO (70 ĐIỂM)</b></th>
+                    </tr>
+                    <tr>
+                        <th style="width:4%;">TT</th>
+                        <th style="width:25%;">Tiêu chí / Nội dung</th>
+                        <th style="width:22%;">Mục tiêu, nhiệm vụ đề ra</th>
+                        <th style="width:22%;">Kết quả sản phẩm thực tế</th>
+                        <th style="width:9%;">Điểm KPI (%)</th>
+                        <th style="width:8%;">Điểm tối đa</th>
+                        <th style="width:10%;">Điểm đạt</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            for(let i=1; i<=6; i++) {
+                const res = calculateAxisKPI(i);
+                totalB += res.score;
+
+                const axisTasks = tasks.filter(t => t.axis == i);
+                let targetText = axisTasks.map(t => t.name).join("; ") || "...";
+                let actualText = axisTasks.map(t => t.product).join("; ") || "...";
+                let kpiText = res.KPI !== null ? `${res.KPI.toFixed(1)}%` : "#DIV/0!";
+                let scoreText = res.KPI !== null ? res.score.toFixed(2) : "#DIV/0!";
+
+                html += `<tr>
+                    <td><b>${i}</b></td>
+                    <td class="text-left"><b>${axisNames[i]}</b></td>
+                    <td class="text-left" style="font-size:9px;">${targetText}</td>
+                    <td class="text-left" style="font-size:9px;">${actualText}</td>
+                    <td><b>${kpiText}</b></td>
+                    <td>${axisMaxScores[i]}</td>
+                    <td><b>${scoreText}</b></td>
+                </tr>`;
+            }
+
+            const grandTotal = generalScore + totalB;
+
+            html += `<tr class="bg-gray">
+                <td colspan="5" class="text-right"><b>TỔNG (B) =</b></td>
+                <td><b>70</b></td>
+                <td><b>${totalB.toFixed(2)}</b></td>
+            </tr>
+            <tr class="bg-gray" style="font-size:12px;">
+                <td colspan="5" class="text-right"><b>TỔNG (A + B) =</b></td>
+                <td><b>100</b></td>
+                <td style="color:#b45309;"><b>${grandTotal.toFixed(2)}</b></td>
+            </tr>
+            </tbody>
+            </table>
+
+            <div style="margin-top:15px; font-size:12px; line-height:1.6;">
+                <p><b>II. TỰ ĐỀ XUẤT MỨC XẾP LOẠI CHẤT LƯỢNG:</b> ....................................................................................</p>
+                <div style="display:flex; justify-content:space-between; margin-top:20px; text-align:center;">
+                    <div></div>
+                    <div>
+                        <b>CÁ NHÂN TỰ ĐÁNH GIÁ</b><br><br><br><br>
+                        <b>${fullname}</b>
+                    </div>
+                </div>
+            </div>`;
+
+            document.getElementById('phuluc02-content').innerHTML = html;
+        }
+
+        function renderPhuLuc03() {
+            let html = `
+                <div class="pl-title">PHỤ LỤC 03: KHUNG ĐIỂM ĐÁNH GIÁ VÀ XẾP LOẠI CHẤT LƯỢNG</div>
+                <div style="text-align:center; font-weight:bold; margin-bottom:15px;">Quy định tiêu chuẩn phân loại xếp loại cán bộ, đảng viên hàng quý</div>
+                <table class="tb-pl01">
+                    <thead>
+                        <tr class="bg-gray">
+                            <th style="width:8%;">STT</th>
+                            <th style="width:25%;">Mức xếp loại chất lượng</th>
+                            <th style="width:20%;">Khung điểm Tổng (A+B)</th>
+                            <th style="width:47%;">Điều kiện bắt buộc đi kèm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>1</b></td>
+                            <td class="text-left" style="font-weight:bold; color:#15803d;">Hoàn thành xuất sắc nhiệm vụ</td>
+                            <td><b>Từ 90.0 đến 100 điểm</b></td>
+                            <td class="text-left">- Điểm Nhóm tiêu chí chung (A) đạt từ 28 điểm trở lên.<br>- Tất cả các Trục công tác đều hoàn thành từ 90% chỉ tiêu trở lên.<br>- Không có công việc bị chậm tiến độ hoặc vi phạm chất lượng nghiêm trọng.</td>
+                        </tr>
+                        <tr>
+                            <td><b>2</b></td>
+                            <td class="text-left" style="font-weight:bold; color:#0369a1;">Hoàn thành tốt nhiệm vụ</td>
+                            <td><b>Từ 70.0 đến dưới 90 điểm</b></td>
+                            <td class="text-left">- Điểm Nhóm tiêu chí chung (A) đạt từ 24 điểm trở lên.<br>- Các nhiệm vụ cơ bản hoàn thành đúng tiến độ và chất lượng đề ra.</td>
+                        </tr>
+                        <tr>
+                            <td><b>3</b></td>
+                            <td class="text-left" style="font-weight:bold; color:#b45309;">Hoàn thành nhiệm vụ</td>
+                            <td><b>Từ 50.0 đến dưới 70 điểm</b></td>
+                            <td class="text-left">- Tổng điểm tổng hợp đạt từ 50 điểm trở lên.<br>- Có một số tiêu chí hoặc công việc chưa đạt tiến độ/chất lượng nhưng chưa đến mức vi phạm kỷ luật.</td>
+                        </tr>
+                        <tr>
+                            <td><b>4</b></td>
+                            <td class="text-left" style="font-weight:bold; color:#dc2626;">Không hoàn thành nhiệm vụ</td>
+                            <td><b>Dưới 50.0 điểm</b></td>
+                            <td class="text-left">- Điểm Tổng (A+B) dưới 50 điểm.<br>- Hoặc vi phạm nghiêm trọng tiêu chí chung, bị xử lý kỷ luật trong quý.</td>
+                        </tr>
+                    </tbody>
+                </table>`;
+
+            document.getElementById('phuluc03-content').innerHTML = html;
+        }
+
+        // Khởi tạo ứng dụng
+        calculateAll();
+    </script>
+</body>
+</html>
